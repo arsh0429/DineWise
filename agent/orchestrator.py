@@ -1,11 +1,28 @@
 """Orchestrator - The agentic loop that ties everything together"""
 import json
 import re
+import logging
+import os
 from agent.llm_client import LLMClient
 from agent.prompts import get_system_prompt
 from agent.context_builder import ContextBuilder
 from rag.vector_store import VectorStore
 from data.models import Restaurant, Reservation, get_session
+
+# Set up logging
+os.makedirs("logs", exist_ok=True)
+logger = logging.getLogger("dinewise")
+logger.setLevel(logging.INFO)
+
+# File handler — persistent log
+file_handler = logging.FileHandler("logs/dinewise.log", encoding="utf-8")
+file_handler.setFormatter(logging.Formatter("%(asctime)s | %(levelname)s | %(message)s"))
+logger.addHandler(file_handler)
+
+# Console handler — for debugging
+console_handler = logging.StreamHandler()
+console_handler.setFormatter(logging.Formatter("%(asctime)s | %(message)s", datefmt="%H:%M:%S"))
+logger.addHandler(console_handler)
 
 class Orchestrator:
     def __init__(self):
@@ -13,6 +30,7 @@ class Orchestrator:
         self.vector_store = VectorStore()
         self.context_builder = ContextBuilder(self.vector_store)
         self.max_iterations = 5
+        logger.info("Orchestrator initialized")
     
     def _clean_response(self, content: str) -> str:
         """Strip Qwen 3 thinking tags and clean up response"""
@@ -24,6 +42,7 @@ class Orchestrator:
     
     def process_message(self, user_message: str, conversation_history: list) -> str:
         """Main agentic loop"""
+        logger.info(f"USER: {user_message}")
         
         # Build messages — no eager RAG, let the LLM decide when to search
         messages = [{"role": "system", "content": get_system_prompt()}]
@@ -50,7 +69,11 @@ class Orchestrator:
                 
                 # Execute each tool
                 for tool_call in response.tool_calls:
-                    result = self._execute_tool(tool_call.function.name, json.loads(tool_call.function.arguments))
+                    tool_name = tool_call.function.name
+                    tool_args = json.loads(tool_call.function.arguments)
+                    logger.info(f"TOOL CALL: {tool_name}({json.dumps(tool_args)})")
+                    result = self._execute_tool(tool_name, tool_args)
+                    logger.info(f"TOOL RESULT: {result[:200]}{'...' if len(result) > 200 else ''}")
                     messages.append({
                         "role": "tool",
                         "tool_call_id": tool_call.id,
@@ -61,6 +84,7 @@ class Orchestrator:
             # No tool calls = final response — clean thinking tags
             cleaned = self._clean_response(response.content)
             if cleaned:
+                logger.info(f"RESPONSE: {cleaned[:200]}{'...' if len(cleaned) > 200 else ''}")
                 return cleaned
             
             # If response was empty after cleaning, retry without tools
