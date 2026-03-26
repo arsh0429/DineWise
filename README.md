@@ -1,18 +1,18 @@
 # 🍽️ DineWise - Restaurant Reservation System
 
-AI-powered restaurant reservation assistant for Bangalore, built with RAG + Tool Calling.
+AI-powered restaurant reservation assistant for Bangalore, built with RAG + Tool Calling. Runs **100% locally** — no cloud APIs needed.
 
 ## Quick Start
 
-### 1. Install dependencies
+### 1. Install Ollama & pull the model
 ```bash
-pip install -r requirements.txt
+# Install Ollama from https://ollama.com
+ollama pull qwen3:8b
 ```
 
-### 2. Set up your API key
+### 2. Install Python dependencies
 ```bash
-cp .env.example .env
-# Edit .env and add your Groq API key (free at https://console.groq.com/keys)
+pip install -r requirements.txt
 ```
 
 ### 3. Initialize the database
@@ -28,23 +28,33 @@ streamlit run app.py
 ## Architecture
 
 ```
-User → Streamlit → Orchestrator → LLM (Groq) → Tool Calls → Database
+User → Streamlit → Orchestrator → LLM (Qwen 3:8B via Ollama) → Tool Calls → Database
                        ↑
                    RAG Context (ChromaDB + MiniLM embeddings)
 ```
 
 ## Features
-- 🔍 Semantic restaurant search across 100 Bangalore restaurants
+- 🔍 Semantic restaurant search across 120 Bangalore restaurants (15 cuisines × 8 neighborhoods)
 - 📍 8 neighborhoods: Koramangala, Indiranagar, Whitefield, HSR Layout, MG Road, Jayanagar, JP Nagar, Malleshwaram
+- 🍕 15 cuisines: North Indian, South Indian, Chinese, Italian, Continental, Japanese, Thai, Mexican, Mediterranean, Mughlai, Coastal, Cafe, Bakery, Pan-Asian, BBQ & Grills
 - 💰 Price ranges in ₹ (₹200-400 to ₹1200+)
-- 🕐 Time slot based availability (2-3 slots per restaurant)
+- 🪑 Per-slot seat capacity tracking with real-time availability
 - 📝 Reservation confirmations with booking receipts
-- 🧠 RAG-grounded responses (no hallucinations)
-- 🔄 Conversation memory with smooth re-routing
+- 📱 Phone number validation (10 digits)
+- 🧠 RAG-grounded responses with cuisine relevance filtering
+- 🔄 Multi-turn conversation with intent-first approach
 
 ## Tech Stack
-- **LLM**: Llama-3.3-70B via Groq API
-- **RAG**: ChromaDB + all-MiniLM-L6-v2
+- **LLM**: Qwen 3:8B via Ollama (local, no API key needed)
+- **RAG**: ChromaDB + all-MiniLM-L6-v2 sentence embeddings
 - **Backend**: SQLAlchemy + SQLite
 - **Frontend**: Streamlit (dark theme)
-- **No LangChain** - built from scratch
+- **No LangChain** — built from scratch with OpenAI-compatible API
+
+## How It Works
+1. User describes what they want (cuisine, area, budget, occasion)
+2. LLM gathers preferences through natural conversation (1 question at a time)
+3. Semantic search finds relevant restaurants via ChromaDB embeddings
+4. LLM filters results by cuisine relevance and presents options
+5. User selects a restaurant → LLM guides through booking flow
+6. Reservation stored in SQLite with capacity tracking per time slot
