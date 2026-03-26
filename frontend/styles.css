@@ -1,0 +1,132 @@
+/* ========== GOOGLE FONT ========== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ========== ROOT ========== */
+:root {
+    --primary: #FF6B35;
+    --primary-hover: #FF8C5A;
+    --bg-dark: #0E1117;
+    --bg-card: #1A1D23;
+    --bg-input: #161B22;
+    --text-primary: #FAFAFA;
+    --text-muted: #8B949E;
+    --success: #2EA043;
+    --border: #30363D;
+}
+
+/* ========== APP BACKGROUND ========== */
+.stApp {
+    font-family: 'Inter', -apple-system, sans-serif !important;
+}
+
+/* ========== CUSTOM HEADER ========== */
+.header {
+    text-align: center;
+    padding: 1.5rem 0 1rem;
+}
+
+.logo {
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C5A 50%, #FFB088 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    letter-spacing: -0.5px;
+}
+
+.tagline {
+    color: #8B949E;
+    font-size: 1.05rem;
+    margin-top: 0.25rem;
+}
+
+/* ========== CHAT MESSAGES ========== */
+[data-testid="stChatMessageContent"] {
+    border-radius: 16px !important;
+    padding: 1rem 1.25rem !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+}
+
+/* Bold text = orange accent */
+[data-testid="stChatMessageContent"] strong {
+    color: #FF8C5A !important;
+}
+
+/* ========== SIDEBAR ========== */
+.sidebar-content {
+    padding: 1rem;
+}
+
+.sidebar-content h3 {
+    color: #FF6B35;
+    margin-bottom: 0.25rem;
+}
+
+.sidebar-content h4 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-content p,
+.sidebar-content li {
+    color: #8B949E;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.sidebar-content ul {
+    padding-left: 1.2rem;
+}
+
+.sidebar-content li {
+    margin-bottom: 0.4rem;
+}
+
+.sidebar-content hr {
+    border-color: #30363D;
+    margin: 1rem 0;
+}
+
+/* ========== BUTTONS ========== */
+.stButton>button {
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C5A 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 0.6rem 1.5rem !important;
+    font-weight: 600 !important;
+    font-family: 'Inter', sans-serif !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25) !important;
+}
+
+.stButton>button:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.35) !important;
+}
+
+/* ========== CODE BLOCKS (for receipts) ========== */
+[data-testid="stChatMessageContent"] pre {
+    border: 1px solid #2EA043 !important;
+    border-radius: 12px !important;
+    padding: 1.25rem !important;
+    color: #2EA043 !important;
+    font-size: 0.85rem !important;
+    line-height: 1.5 !important;
+}
+
+/* ========== HIDE STREAMLIT BRANDING ========== */
+#MainMenu {
+    visibility: hidden;
+}
+
+footer {
+    visibility: hidden;
+}
+
+[data-testid="stToolbar"] {
+    visibility: hidden;
+}

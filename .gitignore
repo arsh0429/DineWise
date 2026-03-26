@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.env
+
+# Database
+data/dinewise.db
+data/chroma_db/
+
+# IDE
+.vscode/
+.idea/
+
+# Debug/temp scripts
+debug_search.py
+verify_db.py
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Gemini
+.gemini/
