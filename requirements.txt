@@ -20,3 +20,6 @@ faker>=22.0.0
 
 # LLM API (Ollama via OpenAI-compatible endpoint)
 openai>=1.0.0
+
+# Data Version Control
+dvc>=3.0.0
