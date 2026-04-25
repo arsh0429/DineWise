@@ -1,0 +1,28 @@
+stages:
+  seed:
+    cmd: python -c "from data.seed import generate_restaurants; generate_restaurants()"
+    deps:
+      - data/seed.py
+      - data/models.py
+    outs:
+      - data/dinewise.db:
+          persist: true
+
+  index:
+    cmd: python -c "from rag.vector_store import VectorStore; vs = VectorStore(); vs.index_restaurants()"
+    deps:
+      - data/dinewise.db
+      - rag/vector_store.py
+    outs:
+      - data/chroma_db:
+          persist: true
+
+  evaluate:
+    cmd: python evaluate.py
+    deps:
+      - evaluate.py
+      - data/dinewise.db
+      - data/chroma_db
+    metrics:
+      - metrics.json:
+          cache: false

@@ -1,0 +1,9 @@
+# DVC Data Version Control
+# Track seed data and model artifacts
+
+# Seed configuration (inputs)
+data/seed.py
+
+# Generated artifacts (outputs tracked by DVC)
+# data/dinewise.db  — regenerated via setup.py
+# data/chroma_db/   — regenerated via setup.py

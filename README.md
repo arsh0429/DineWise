@@ -75,6 +75,36 @@ All interactions are logged to `logs/dinewise.log`:
 2026-03-27 01:15:03 | INFO | RESPONSE: Here's a great Italian spot in Koramangala...
 ```
 
+## Evaluation: RAG vs SQL Baseline
+We benchmark RAG semantic search against a simple SQL `WHERE cuisine = X AND neighborhood = Y` baseline across 20 test queries:
+
+```bash
+python evaluate.py
+```
+
+| Method | Accuracy | Avg Latency | Notes |
+|---|---|---|---|
+| **RAG Search** | Measured via `evaluate.py` | ~50ms | Handles fuzzy queries ("cozy pizza place") |
+| **SQL Baseline** | Measured via `evaluate.py` | ~1ms | Only works with exact cuisine + neighborhood |
+
+RAG's advantage: it understands _intent_ — "romantic dinner" matches Italian/Continental restaurants even without mentioning a cuisine. SQL requires exact field matches.
+
+Run `python evaluate.py` to see current results. Metrics are saved to `metrics.json` for tracking.
+
+## Data Versioning (DVC)
+The data pipeline is tracked with DVC for reproducibility:
+
+```bash
+pip install dvc
+dvc repro       # Reproduces: seed → index → evaluate
+dvc metrics show  # Shows latest accuracy metrics
+```
+
+Pipeline stages defined in `dvc.yaml`:
+```
+seed (data/seed.py) → dinewise.db → index (vector_store.py) → chroma_db → evaluate → metrics.json
+```
+
 ## Limitations & Future Improvements
 
 ### Current Limitations
